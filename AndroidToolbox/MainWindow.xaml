@@ -1,0 +1,18 @@
+﻿<Window x:Class="AndroidToolbox.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Android反编译工具箱" Height="300" Width="600">
+    <Grid   Height="300" Width="600">
+        <Button Content="反编译APK" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click"/>
+        <Button Content="打包APK" HorizontalAlignment="Left" Margin="151,10,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_1"/>
+        <Button Content="反编译DEX" HorizontalAlignment="Left" Margin="288,10,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_2"/>
+        <Button Content="打包DEX" HorizontalAlignment="Left" Margin="426,10,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_3"/>
+        <Button Content="APK签名" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_4"/>
+        <Button Content="查看APK源码" HorizontalAlignment="Left" Margin="151,71,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_5"/>
+        <Button Content="查看Class源码" HorizontalAlignment="Left" Margin="288,71,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_6"/>
+        <Button Content="dex2jar" HorizontalAlignment="Left" Margin="10,132,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_7"/>
+        <Button Content="jar2dex" HorizontalAlignment="Left" Margin="151,132,0,0" VerticalAlignment="Top" Width="114" RenderTransformOrigin="-2.033,-1.841" Height="44" Click="Button_Click_8"/>
+        <Button Content="关于" HorizontalAlignment="Left" Margin="494,236,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_9" />
+        <Button Content="Enjarify" HorizontalAlignment="Left" Margin="288,132,0,0" VerticalAlignment="Top" Width="114" Height="44" Click="Button_Click_10"/>
+    </Grid>
+</Window>
