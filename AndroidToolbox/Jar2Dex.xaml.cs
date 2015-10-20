@@ -139,7 +139,6 @@ namespace AndroidToolbox
             var d = new CommonOpenFileDialog();
             d.IsFolderPicker = true;	//set to false if need to select files
             d.Title = "选择保存位置:";
-            d.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             var result = d.ShowDialog();
             if (result == CommonFileDialogResult.Ok)
             {
