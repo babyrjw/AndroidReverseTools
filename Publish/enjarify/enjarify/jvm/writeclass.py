@@ -50,9 +50,10 @@ def writeMethod(pool, stream, method, code_attr_data):
     stream.u16(pool.utf8(method.id.desc))
 
     if code_attr_data is not None:
+        code_attr_data = code_attr_data.toBytes()
         stream.u16(1)
         stream.u16(pool.utf8(b"Code"))
-        stream.u32(code_attr_data.len)
+        stream.u32(len(code_attr_data))
         stream.write(code_attr_data)
     else:
         stream.u16(0) # no attributes
@@ -75,7 +76,12 @@ def classFileAfterPool(cls, opts):
         pool = constantpool.SimpleConstantPool()
 
     cls.parseData()
-    stream.u16(cls.access & flags.CLASS_FLAGS) # access
+    access = cls.access & flags.CLASS_FLAGS
+    if not access & flags.ACC_INTERFACE:
+        # Not necessary for correctness, but this works around a bug in dx
+        access |= flags.ACC_SUPER
+
+    stream.u16(access) # access
     stream.u16(pool.class_(cls.name)) # this
     super_ = pool.class_(cls.super) if cls.super is not None else 0
     stream.u16(super_) # super
@@ -109,11 +115,11 @@ def toClassFile(cls, opts):
     try:
         pool, rest_stream = classFileAfterPool(cls, opts=opts)
     except error.ClassfileLimitExceeded:
-        print('Retrying {} with optimization enabled'.format(cls.name))
+        # print('Retrying {} with optimization enabled'.format(cls.name))
         pool, rest_stream = classFileAfterPool(cls, opts=options.ALL)
 
     # write constant pool
     pool.write(stream)
     # write rest of file
-    stream.write(rest_stream)
+    stream.write(rest_stream.toBytes())
     return stream.toBytes()

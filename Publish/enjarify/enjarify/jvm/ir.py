@@ -40,7 +40,6 @@ class Label(JvmInstruction):
 
 _ilfdaOrd = [scalars.INT, scalars.LONG, scalars.FLOAT, scalars.DOUBLE, scalars.OBJ].index
 class RegAccess(JvmInstruction):
-    max = 4 # upper limit on length of bytecode
     def __init__(self, dreg, st, store):
         super().__init__()
         self.key = dreg, st
@@ -54,7 +53,7 @@ class RegAccess(JvmInstruction):
         return new
 
     def calcBytecode(self, local):
-        assert(self.bytecode is None)
+        assert self.bytecode is None
         stype = self.key[1]
         op_off = (ISTORE - ILOAD) if self.store else 0
         if local < 4:
@@ -175,7 +174,7 @@ class Switch(JvmInstruction):
         self.default = default
         self.jumps = jumps
 
-        assert(jumps)
+        assert jumps
         self.low = min(jumps)
         self.high = max(jumps)
 
@@ -195,22 +194,27 @@ class Switch(JvmInstruction):
         offset = posd[labels[self.default]] - pos
         pad = (-pos-1) % 4
 
-        parts = []
+        bytecode = bytearray()
         if self.istable:
-            parts.append(bytes([TABLESWITCH] + [0]*pad))
-            parts.append(struct.pack('>iii', offset, self.low, self.high))
+            bytecode += bytes([TABLESWITCH] + [0]*pad)
+            bytecode += struct.pack('>iii', offset, self.low, self.high)
             for k in range(self.low, self.high + 1):
                 target = self.jumps.get(k, self.default)
-                parts.append(struct.pack('>i', posd[labels[target]] - pos))
+                bytecode += struct.pack('>i', posd[labels[target]] - pos)
         else:
-            parts.append(bytes([LOOKUPSWITCH] + [0]*pad))
-            parts.append(struct.pack('>iI', offset, len(self.jumps)))
+            bytecode += bytes([LOOKUPSWITCH] + [0]*pad)
+            bytecode += struct.pack('>iI', offset, len(self.jumps))
             for k, target in sorted(self.jumps.items()):
                 offset = posd[labels[target]] - pos
-                parts.append(struct.pack('>ii', k, offset))
-        self.bytecode = b''.join(parts)
+                bytecode += struct.pack('>ii', k, offset)
+        self.bytecode = bytes(bytecode)
 
 _return_or_throw_bytecodes = {bytes([op]) for op in range(IRETURN, RETURN+1) }
 _return_or_throw_bytecodes.add(bytes([ATHROW]))
 class Other(JvmInstruction):
     def fallsthrough(self): return self.bytecode not in _return_or_throw_bytecodes
+
+def Pop(): return Other(bytes([POP]))
+def Pop2(): return Other(bytes([POP2]))
+def Dup(): return Other(bytes([DUP]))
+def Dup2(): return Other(bytes([DUP2]))

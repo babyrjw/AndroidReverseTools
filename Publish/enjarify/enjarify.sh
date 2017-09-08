@@ -33,10 +33,10 @@ guess "python"
 if [ -z "$PYTHON" ]; then
 	echo "Unable to find python3 on path"
 else
-	echo "Using $PYTHON as Python interperter"
+	echo "Using $PYTHON as Python interpreter"
 
 	# Find location of this bash script, and set its directory as the PYTHONPATH
-	export PYTHONPATH=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+	export PYTHONPATH=$(dirname "$(readlink "${BASH_SOURCE[0]}")")
 
 	# Now execute the actual program
 	exec $PYTHON -O -m enjarify.main "$@"
